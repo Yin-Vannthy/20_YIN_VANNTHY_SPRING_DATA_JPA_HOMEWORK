@@ -1,0 +1,62 @@
+package com.api.springdatajpa.controller;
+
+import com.api.springdatajpa.model.enums.Enums;
+import com.api.springdatajpa.model.request.OrderRequest;
+import com.api.springdatajpa.service.OrderService;
+import com.api.springdatajpa.util.APIResponseUtil;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/order")
+@AllArgsConstructor
+public class OrderController {
+    private final OrderService orderService;
+
+    @PostMapping("/createOrder/{customerId}")
+    public ResponseEntity<?> createOrder(@PathVariable Long customerId, @RequestBody @Valid List<OrderRequest> orderRequestList) {
+        return ResponseEntity.ok(
+                APIResponseUtil.apiResponse(
+                        orderService.createOrder(customerId, orderRequestList),
+                        HttpStatus.CREATED
+                )
+        );
+    }
+
+    @GetMapping("/findOrderById/{orderId}")
+    public ResponseEntity<?> findOrderById(@PathVariable Long orderId) {
+        return ResponseEntity.ok(
+                APIResponseUtil.apiResponse(
+                        orderService.findOrderById(orderId),
+                        HttpStatus.OK
+                )
+        );
+    }
+
+    @PutMapping("/updateOrderStatus/{orderId}")
+    public ResponseEntity<?> updateOrderStatusByOrderId(
+            @RequestParam(defaultValue = "PENDING", required = false) Enums.Status status,
+            @PathVariable Long orderId) {
+        return ResponseEntity.ok(
+          APIResponseUtil.apiResponse(
+                  orderService.updateOrderStatusByOrderId(orderId, status),
+                  HttpStatus.OK
+          )
+        );
+    }
+
+    @GetMapping("/findOrderByCustomerId/{customerId}")
+    public ResponseEntity<?> findOrderByCustomerId(@PathVariable Long customerId) {
+        return ResponseEntity.ok(
+                APIResponseUtil.apiResponse(
+                        orderService.findOrderByCustomerId(customerId),
+                        HttpStatus.OK
+                )
+        );
+    }
+}

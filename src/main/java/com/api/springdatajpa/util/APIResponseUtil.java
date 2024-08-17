@@ -1,6 +1,6 @@
 package com.api.springdatajpa.util;
 
-import com.api.springdatajpa.response.ApiResponse;
+import com.api.springdatajpa.model.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;

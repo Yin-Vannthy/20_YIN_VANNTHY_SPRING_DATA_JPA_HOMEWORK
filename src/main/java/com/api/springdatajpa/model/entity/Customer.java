@@ -1,14 +1,10 @@
 package com.api.springdatajpa.model.entity;
 
 import com.api.springdatajpa.model.dto.CustomerDto;
-import com.api.springdatajpa.model.dto.OrderDto;
-import com.api.springdatajpa.model.dto.ProductDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,17 +32,32 @@ public class Customer {
     private Email email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     public Customer(Long customerId, String customerName, String address, String phoneNumber, Email email) {
         this.customerId = customerId;
-        this.customerName = customerName;
-        this.address = address;
+        this.customerName = customerName.toUpperCase();
+        this.address = address.toUpperCase();
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
     public CustomerDto toCustomerResponse(){
-        return new CustomerDto(this.customerId, this.customerName, this.address, this.phoneNumber, this.email);
+        return new CustomerDto(
+                this.customerId,
+                this.customerName.toUpperCase(),
+                this.address.toUpperCase(),
+                this.phoneNumber,
+                this.email);
+    }
+
+    public CustomerDto toCustomerWithOrderResponse(){
+        return new CustomerDto(
+                this.customerId,
+                this.customerName.toUpperCase(),
+                this.address.toUpperCase(),
+                this.phoneNumber,
+                this.email,
+                this.orders.stream().map(Order::toOrderResponse).toList());
     }
 }

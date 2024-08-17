@@ -35,14 +35,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<CustomerDto> updateCustomerById(Long customerId, CustomerRequest customerRequest) {
         findCustomerByEmail(customerRequest.getEmail()).ifPresent(
-                customer -> {
-                    if (!customer.getCustomerId().equals(customerId))
+                c -> {
+                    if (!c.getCustomerId().equals(customerId))
                         throw new CustomNotFoundException("This email is already in used by another user.");
                 }
         );
 
-        return findCustomerById(customerId).map(
-                customer -> customerRepository.save(customerRequest.toCustomerEntity(customerId, customer.getEmail().getId())).toCustomerResponse());
+        return findCustomerById(customerId)
+                .map(c -> customerRepository.save(customerRequest.toCustomerEntity(customerId, c.getEmail().getId())).toCustomerWithOrderResponse());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
         return Optional.of(
                 customerRepository.findById(customerId).orElseThrow(
                         () -> new CustomNotFoundException("No customer with Id : " + customerId + " found")
-                ).toCustomerResponse());
+                ).toCustomerWithOrderResponse());
     }
 
     @Override
@@ -64,11 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         return customerRepository.findAll(pageable).getContent()
-                .stream().map(Customer::toCustomerResponse).toList();
+                .stream().map(Customer::toCustomerWithOrderResponse).toList();
     }
 
     public Optional<CustomerDto> findCustomerByEmail(String email) {
-        return customerRepository.findCustomerByEmail(email.toLowerCase()).map(Customer::toCustomerResponse);
+        return customerRepository.findCustomerByEmail(email.toLowerCase()).map(Customer::toCustomerWithOrderResponse);
     }
-
 }

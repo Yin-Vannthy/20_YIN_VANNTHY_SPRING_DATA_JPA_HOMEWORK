@@ -14,7 +14,7 @@ public class CustomerRequest {
     @NotEmpty(message = "Name Can not be empty")
     @NotBlank(message = "Name Can not be blank")
     @NotNull(message = "Name Can not be null")
-    private String customer_name;
+    private String customerName;
 
     @NotEmpty(message = "Address Can not be empty")
     @NotBlank(message = "Address Can not be blank")
@@ -37,8 +37,8 @@ public class CustomerRequest {
         Email email = new Email(this.email.toLowerCase());
 
         return new Customer(null,
-                this.customer_name,
-                this.address,
+                this.customerName.toUpperCase(),
+                this.address.toUpperCase(),
                 this.phoneNumber,
                 email);
     }
@@ -47,8 +47,8 @@ public class CustomerRequest {
         Email email = new Email(emailId, this.email.toLowerCase());
 
         return new Customer(customerId,
-                this.customer_name,
-                this.address,
+                this.customerName.toUpperCase(),
+                this.address.toUpperCase(),
                 this.phoneNumber,
                 email);
     }

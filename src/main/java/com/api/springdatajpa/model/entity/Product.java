@@ -26,12 +26,12 @@ public class Product {
     @Column(length = 100)
     private String description;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProductOrder> productOrder;
 
     public Product(Long id, String productName, Float unitPrice, String description) {
         this.id = id;
-        this.productName = productName;
+        this.productName = productName.toUpperCase();
         this.unitPrice = unitPrice;
         this.description = description;
     }

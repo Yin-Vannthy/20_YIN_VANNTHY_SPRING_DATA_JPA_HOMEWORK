@@ -14,7 +14,7 @@ public class ProductRequest {
     private String productName;
 
     @NotNull(message = "Unit price cannot be null")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Unit price must be greater than or equal to zero")
+    @Positive(message = "Unit price must be greater than 0")
     @Digits(integer = 10, fraction = 2, message = "Invalid unit price format. Maximum 10 integer digits and 2 decimal digits allowed.")
     private Float unitPrice;
 
@@ -24,10 +24,10 @@ public class ProductRequest {
     private String description;
 
     public Product toProductEntity() {
-        return new Product(null, this.productName, this.unitPrice, this.description);
+        return new Product(null, this.productName.toUpperCase(), this.unitPrice, this.description);
     }
 
     public Product toProductEntity(Long productId) {
-        return new Product(productId, this.productName, this.unitPrice, this.description);
+        return new Product(productId, this.productName.toUpperCase(), this.unitPrice, this.description);
     }
 }

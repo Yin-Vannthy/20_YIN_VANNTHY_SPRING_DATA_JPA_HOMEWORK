@@ -16,7 +16,7 @@ public class CustomerDto {
     private String address;
     private String phoneNumber;
     private Email email;
-    private List<OrderDto> orderList = new ArrayList<>();
+    private List<OrderDto> orderList;
 
     public Customer toCustomerEntity() {
         return new Customer(
@@ -33,5 +33,14 @@ public class CustomerDto {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public CustomerDto(Long customerId, String customerName, String address, String phoneNumber, Email email, List<OrderDto> orderList) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.orderList = orderList;
     }
 }

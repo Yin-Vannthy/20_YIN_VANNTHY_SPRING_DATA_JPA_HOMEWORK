@@ -14,9 +14,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findProductByProductName(String name);
 
     @Query(value = """
-            SELECT p.* FROM product p JOIN product_order ON p.id = product_order.product_id
-                    JOIN order_tb o ON o.order_id = product_order.order_id
-                    WHERE o.order_id = :orderId
+            SELECT p.* FROM product p 
+                JOIN product_order ON p.id = product_order.product_id
+                JOIN order_tb o ON o.order_id = product_order.order_id
+            WHERE o.order_id = :orderId
         """,
     nativeQuery = true)
     List<Product> findProductsByOrderId(@Param("orderId") Long orderId);

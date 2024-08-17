@@ -4,7 +4,6 @@ import com.api.springdatajpa.model.dto.OrderDto;
 import com.api.springdatajpa.model.dto.ProductDto;
 import com.api.springdatajpa.model.enums.Enums;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -26,8 +26,7 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime orderDate = LocalDateTime.now();
+    private String orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
     @Column(name = "total_amount")
     private Float totalAmount;
@@ -51,4 +50,12 @@ public class Order {
         this.customer = customer;
     }
 
+    public OrderDto toOrderResponse() {
+        return new OrderDto(
+                this.orderId,
+                this.orderDate,
+                this.totalAmount,
+                this.status,
+                this.productOrder.stream().map(pro -> pro.getProduct().toProductResponse()).toList());
+    }
 }

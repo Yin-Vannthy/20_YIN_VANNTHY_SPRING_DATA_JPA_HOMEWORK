@@ -15,7 +15,7 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productId;
 
     @Column(nullable = false, name = "product_name")
     private String productName;
@@ -29,14 +29,14 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProductOrder> productOrder;
 
-    public Product(Long id, String productName, Float unitPrice, String description) {
-        this.id = id;
+    public Product(Long productId, String productName, Float unitPrice, String description) {
+        this.productId = productId;
         this.productName = productName.toUpperCase();
         this.unitPrice = unitPrice;
         this.description = description;
     }
 
     public ProductDto toProductResponse() {
-        return new ProductDto(this.id, this.productName, this.unitPrice, this.description);
+        return new ProductDto(this.productId, this.productName, this.unitPrice, this.description);
     }
 }

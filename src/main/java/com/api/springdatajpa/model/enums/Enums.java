@@ -2,7 +2,7 @@ package com.api.springdatajpa.model.enums;
 
 public class Enums {
     public enum CustomerSortBy {
-        customerID,
+        customerId,
         customerName,
         address,
         phoneNumber,

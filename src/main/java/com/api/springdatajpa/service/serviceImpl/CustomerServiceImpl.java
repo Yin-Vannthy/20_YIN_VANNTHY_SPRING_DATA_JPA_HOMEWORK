@@ -34,16 +34,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Optional<CustomerDto> updateCustomerById(Long customerId, CustomerRequest customerRequest) {
-        findCustomerByEmail(customerRequest.getEmail()).ifPresent(
-                c -> {
-                    if (!c.getCustomerId().equals(customerId))
-                        throw new CustomNotFoundException("This email is already in used by another user.");
-                }
-        );
+        findCustomerByEmail(customerRequest.getEmail()).ifPresent(c -> {
+            if (!c.getCustomerId().equals(customerId)) {
+                throw new CustomNotFoundException("This email is already in use by another user.");
+            }
+        });
 
-        return findCustomerById(customerId)
-                .map(c -> customerRepository.save(customerRequest.toCustomerEntity(customerId, c.getEmail().getId())).toCustomerWithOrderResponse());
+        return Optional.ofNullable(customerRepository.findById(customerId)
+                .map(c -> {
+                    c.toCustomerEntity(customerRequest);
+                    return customerRepository.save(c).toCustomerWithOrderResponse();
+                }).orElseThrow(
+                        () -> new CustomNotFoundException("No customer with Id : " + customerId + " found")
+                ));
     }
+
 
     @Override
     public Optional<CustomerDto> findCustomerById(Long customerId) {

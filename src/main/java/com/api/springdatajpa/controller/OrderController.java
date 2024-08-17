@@ -1,7 +1,9 @@
 package com.api.springdatajpa.controller;
 
+import com.api.springdatajpa.model.dto.OrderDto;
 import com.api.springdatajpa.model.enums.Enums;
 import com.api.springdatajpa.model.request.OrderRequest;
+import com.api.springdatajpa.model.response.ApiResponse;
 import com.api.springdatajpa.service.OrderService;
 import com.api.springdatajpa.util.APIResponseUtil;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -19,7 +22,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/createOrder/{customerId}")
-    public ResponseEntity<?> createOrder(@PathVariable Long customerId, @RequestBody @Valid List<OrderRequest> orderRequestList) {
+    public ResponseEntity<ApiResponse<OrderDto>> createOrder(@PathVariable Long customerId, @RequestBody @Valid List<OrderRequest> orderRequestList) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         orderService.createOrder(customerId, orderRequestList),
@@ -29,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("/findOrderById/{orderId}")
-    public ResponseEntity<?> findOrderById(@PathVariable Long orderId) {
+    public ResponseEntity<ApiResponse<Optional<OrderDto>>> findOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         orderService.findOrderById(orderId),
@@ -39,7 +42,7 @@ public class OrderController {
     }
 
     @PutMapping("/updateOrderStatus/{orderId}")
-    public ResponseEntity<?> updateOrderStatusByOrderId(
+    public ResponseEntity<ApiResponse<OrderDto>> updateOrderStatusByOrderId(
             @RequestParam(defaultValue = "PENDING", required = false) Enums.Status status,
             @PathVariable Long orderId) {
         return ResponseEntity.ok(
@@ -51,7 +54,7 @@ public class OrderController {
     }
 
     @GetMapping("/findOrderByCustomerId/{customerId}")
-    public ResponseEntity<?> findOrderByCustomerId(@PathVariable Long customerId) {
+    public ResponseEntity<ApiResponse<List<OrderDto>>> findOrderByCustomerId(@PathVariable Long customerId) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         orderService.findOrderByCustomerId(customerId),

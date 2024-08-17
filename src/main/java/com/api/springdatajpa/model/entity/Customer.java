@@ -1,6 +1,7 @@
 package com.api.springdatajpa.model.entity;
 
 import com.api.springdatajpa.model.dto.CustomerDto;
+import com.api.springdatajpa.model.request.CustomerRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,5 +60,12 @@ public class Customer {
                 this.phoneNumber,
                 this.email,
                 this.orders.stream().map(Order::toOrderResponse).toList());
+    }
+
+    public void toCustomerEntity(CustomerRequest customerRequest){
+        this.customerName = customerRequest.getCustomerName().toUpperCase();
+        this.address = customerRequest.getAddress().toUpperCase();
+        this.phoneNumber = customerRequest.getPhoneNumber();
+        this.email.setEmail(customerRequest.getEmail().toLowerCase());
     }
 }

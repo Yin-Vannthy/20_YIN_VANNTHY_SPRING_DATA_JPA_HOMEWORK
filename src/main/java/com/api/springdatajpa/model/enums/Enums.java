@@ -5,14 +5,14 @@ public class Enums {
         customerID,
         customerName,
         address,
-        phoneNumber;
+        phoneNumber,
     }
 
     public enum ProductSortBy {
         productId,
         productName,
         unitPrice,
-        description,;
+        description,
     }
 
     public enum Status {

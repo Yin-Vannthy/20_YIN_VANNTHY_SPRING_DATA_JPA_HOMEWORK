@@ -3,7 +3,6 @@ package com.api.springdatajpa.model.entity;
 import com.api.springdatajpa.model.dto.OrderDto;
 import com.api.springdatajpa.model.dto.ProductDto;
 import com.api.springdatajpa.model.enums.Enums;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

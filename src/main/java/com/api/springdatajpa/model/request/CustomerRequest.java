@@ -43,13 +43,4 @@ public class CustomerRequest {
                 email);
     }
 
-    public Customer toCustomerEntity(Long customerId, Long emailId) {
-        Email email = new Email(emailId, this.email.toLowerCase());
-
-        return new Customer(customerId,
-                this.customerName.toUpperCase(),
-                this.address.toUpperCase(),
-                this.phoneNumber,
-                email);
-    }
 }

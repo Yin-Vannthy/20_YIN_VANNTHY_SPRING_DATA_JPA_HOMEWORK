@@ -16,7 +16,7 @@ public class CustomerDto {
     private String address;
     private String phoneNumber;
     private Email email;
-    private List<OrderDto> orderList;
+    private List<OrderDto> orderList = new ArrayList<>();
 
     public Customer toCustomerEntity() {
         return new Customer(

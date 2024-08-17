@@ -1,7 +1,9 @@
 package com.api.springdatajpa.controller;
 
+import com.api.springdatajpa.model.dto.CustomerDto;
 import com.api.springdatajpa.model.enums.Enums;
 import com.api.springdatajpa.model.request.CustomerRequest;
+import com.api.springdatajpa.model.response.ApiResponse;
 import com.api.springdatajpa.service.CustomerService;
 import com.api.springdatajpa.util.APIResponseUtil;
 import jakarta.validation.Valid;
@@ -11,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/customer")
 @AllArgsConstructor
@@ -18,7 +23,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+    public ResponseEntity<ApiResponse<CustomerDto>> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         customerService.createCustomer(customerRequest),
@@ -27,7 +32,7 @@ public class CustomerController {
     }
 
     @GetMapping("/findCustomerById/{customerId}")
-    public ResponseEntity<?> findCustomerById(
+    public ResponseEntity<ApiResponse<Optional<CustomerDto>>> findCustomerById(
             @PathVariable  Long customerId
     ) {
         return ResponseEntity.ok(
@@ -39,7 +44,7 @@ public class CustomerController {
     }
 
     @PutMapping("/updateCustomerById/{customerId}")
-    public ResponseEntity<?> updateCustomer(
+    public ResponseEntity<ApiResponse<Optional<CustomerDto>>> updateCustomer(
             @PathVariable  Long customerId,
             @Valid @RequestBody CustomerRequest customerRequest) {
         return ResponseEntity.ok(
@@ -51,7 +56,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/deleteCustomerById/{customerId}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable   Long customerId) {
+    public ResponseEntity<ApiResponse<?>> deleteCustomerById(@PathVariable   Long customerId) {
         customerService.deleteCustomerById(customerId);
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
@@ -62,7 +67,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getAllCustomers")
-    public ResponseEntity<?> getAllCustomer(
+    public ResponseEntity<ApiResponse<List<CustomerDto>>> getAllCustomer(
             @RequestParam(defaultValue = "0", required = false) Integer pageNo,
             @RequestParam(defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(defaultValue = "customerName", required = false) Enums.CustomerSortBy sortBy,

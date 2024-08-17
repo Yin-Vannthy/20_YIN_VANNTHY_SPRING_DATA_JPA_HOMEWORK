@@ -1,7 +1,9 @@
 package com.api.springdatajpa.controller;
 
+import com.api.springdatajpa.model.dto.ProductDto;
 import com.api.springdatajpa.model.enums.Enums;
 import com.api.springdatajpa.model.request.ProductRequest;
+import com.api.springdatajpa.model.response.ApiResponse;
 import com.api.springdatajpa.service.ProductService;
 import com.api.springdatajpa.util.APIResponseUtil;
 import jakarta.validation.Valid;
@@ -11,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/product")
 @AllArgsConstructor
@@ -18,7 +23,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/createProduct")
-    public ResponseEntity<?> createProduct(@RequestBody @Valid ProductRequest productRequest) {
+    public ResponseEntity<ApiResponse<Optional<ProductDto>>> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         productService.createProduct(productRequest),
@@ -27,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("/findProductById/{productId}")
-    public ResponseEntity<?> findProductById(@PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<Optional<ProductDto>>> findProductById(@PathVariable Long productId) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         productService.findProductById(productId),
@@ -36,7 +41,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProductById/{productId}")
-    public ResponseEntity<?> deleteProductById(@PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<?>> deleteProductById(@PathVariable Long productId) {
         productService.deleteProductById(productId);
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
@@ -46,7 +51,7 @@ public class ProductController {
     }
 
     @GetMapping("/findAllProducts")
-    public ResponseEntity<?> findAllProducts(
+    public ResponseEntity<ApiResponse<List<ProductDto>>> findAllProducts(
             @RequestParam(defaultValue = "0", required = false) Integer pageNo,
             @RequestParam(defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(defaultValue = "productName", required = false) Enums.ProductSortBy sortBy,
@@ -60,7 +65,7 @@ public class ProductController {
     }
 
     @PutMapping("/updateProductById/{productId}")
-    public ResponseEntity<?> updateProductById(@PathVariable Long productId, @RequestBody @Valid ProductRequest productRequest) {
+    public ResponseEntity<ApiResponse<Optional<ProductDto>>> updateProductById(@PathVariable Long productId, @RequestBody @Valid ProductRequest productRequest) {
         return ResponseEntity.ok(
                 APIResponseUtil.apiResponse(
                         productService.updateProductById(productId, productRequest),

@@ -14,7 +14,7 @@ public class ProductRequest {
     private String productName;
 
     @NotNull(message = "Unit price cannot be null")
-    @Positive(message = "Unit price must be greater than 0")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0")
     @Digits(integer = 10, fraction = 2, message = "Invalid unit price format. Maximum 10 integer digits and 2 decimal digits allowed.")
     private Float unitPrice;
 

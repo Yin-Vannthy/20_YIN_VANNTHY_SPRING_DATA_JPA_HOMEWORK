@@ -41,14 +41,17 @@ public class OrderServiceImpl implements OrderService {
         List<ProductDto> products = new ArrayList<>();
 
         order.setTotalAmount(orderRequests.stream().map(request -> {
-            ProductDto productDto = productService.findProductById(request.getProductId())
-                    .orElseThrow(() -> new CustomNotFoundException("Product with Id : " + request.getProductId() + " not found."));
+                ProductDto productDto = productService.findProductById(request.getProductId())
+                        .orElseThrow(
+                                () -> new CustomNotFoundException("Product with Id : " + request.getProductId() + " not found.")
+                        );
 
-            products.add(productDto);
-            productOrders.add(new ProductOrder(request.getQuantity(), productDto.toProductEntity(), order));
+                products.add(productDto);
+                productOrders.add(new ProductOrder(request.getQuantity(), productDto.toProductEntity(), order));
 
-            return productDto.getUnitPrice() * request.getQuantity();
-        }).reduce(0F, Float::sum));
+                return productDto.getUnitPrice() * request.getQuantity();
+            }
+        ).reduce(0F, Float::sum));
 
         // Save the order and associated product orders
         orderRepository.save(order);

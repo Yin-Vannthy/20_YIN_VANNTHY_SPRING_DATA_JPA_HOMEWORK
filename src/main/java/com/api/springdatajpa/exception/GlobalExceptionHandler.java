@@ -18,7 +18,6 @@ import java.util.HashMap;
 @RestController
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-
     @ExceptionHandler({CustomNotFoundException.class})
     public ProblemDetail handlerAllNotFoundException(CustomNotFoundException e) {
 
@@ -35,7 +34,7 @@ public class GlobalExceptionHandler {
     public ProblemDetail handlerArgumentNotValidException(MethodArgumentNotValidException e) {
 
         HashMap<String, String> errors = new HashMap<>();
-        for(FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
@@ -46,6 +45,7 @@ public class GlobalExceptionHandler {
         problemDetail.setProperty("timestamp", LocalDateTime.now());
         return problemDetail;
     }
+
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ProblemDetail handleMethodValidationException(HandlerMethodValidationException e) {
         HashMap<String, String> errors = new HashMap<>();
